@@ -6,8 +6,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: My Test
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         with:
           fetch-depth: 2
+
+      - name: My Test
         run: git diff --name-only HEAD HEAD~1
