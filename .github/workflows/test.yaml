@@ -7,4 +7,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: My Test
-        run: echo $(git diff --name-only HEAD HEAD~1)
+        run: echo $(git diff --name-only $GITHUB_SHA $GITHUB_REF)
