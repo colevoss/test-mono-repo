@@ -1,0 +1,10 @@
+name: My Test
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: My Test
+        run: git diff --name-only HEAD HEAD~1
