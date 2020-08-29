@@ -35,7 +35,7 @@ jobs:
       - name: Set Dir Variable
         if: steps.git-check.outputs.changed == 'true'
         run: |
-          echo "::set-env name=SERVICE_DIR::$(echo "services/${{ matrix.dirs }}")"
+          echo "::set-env name=SERVICE_DIR::services/${{ matrix.dirs }}"
 
       - name: Deploy
         if: steps.git-check.outputs.changed == 'true'
@@ -43,4 +43,4 @@ jobs:
           PORT: ${{ secrets.PORT }}
         run: |
           (echo "cat <<EOF"; cat ${{ env.SERVICE_DIR }}/service.yaml; echo "EOF";) | bash > ${{ env.SERVICE_DIR }}/service_ready.yaml
-          cat ${{ env.SERVICE_DIRS }}/service_ready.yaml
+          cat ${{ env.SERVICE_DIR }}/service_ready.yaml
