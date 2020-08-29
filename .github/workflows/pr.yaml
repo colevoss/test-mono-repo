@@ -27,3 +27,11 @@ jobs:
       - name: Do something
         if: steps.git-check.outputs.changed == 'true'
         run: echo "YEP CHANGED!"
+
+      - name: Deploy
+        if: steps.git-check.outputs.changed == 'true'
+        env:
+          PORT: ${{ secrets.PORT }}
+        run: |
+          (echo "cat <<EOF"; cat service.yaml; echo "EOF";) | bash > service_ready.yaml
+          cat service_ready.yaml
