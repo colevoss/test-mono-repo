@@ -22,4 +22,4 @@ jobs:
 
       - name: Do something
         if: steps.git-check.outputs.changed == 'true'
-        run: echo "YEP CHANGED!
+        run: echo "YEP CHANGED!"
