@@ -20,12 +20,15 @@ jobs:
       #     ref: origin/${{ github.base_ref }}
 
       - uses: actions/checkout@v2
+        run: |
+          git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
+
 
         # with:
         #   fetch-depth: 0
       - name: Check Git Diff Log
         # run: git diff --name-only --quiet ${{ github.sha }} ${{ github.base_ref }} ${{ matrix.dirs }}
-        run: git diff --name-only --quiet origin/${{ github.base_ref }} ${{ github.ref }} ${{ matrix.dirs }}
+        run: git diff --name-only --quiet origin/${{ github.base_ref }} ${{ github.head_ref }} ${{ matrix.dirs }}
 
       - name: Check Git Diff
         id: git-check
