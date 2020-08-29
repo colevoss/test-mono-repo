@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Check Git Diff
+      - name: Check Git Diff Log
         run: git diff --name-only --quiet ${{ github.head_ref }} ${{ github.base_ref }} ${{ matrix.dirs }}
 
       - name: Check Git Diff
