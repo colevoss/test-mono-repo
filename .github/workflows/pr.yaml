@@ -37,5 +37,5 @@ jobs:
         env:
           PORT: ${{ secrets.PORT }}
         run: |
-          (echo "cat <<EOF"; cat service.yaml; echo "EOF";) | bash > service_ready.yaml
-          cat service_ready.yaml
+          (echo "cat <<EOF"; cat ./services/${{ matrix.dirs }}/service.yaml; echo "EOF";) | bash > service_ready.yaml
+          cat ./services/${{ matrix.dirs }}/service_ready.yaml
