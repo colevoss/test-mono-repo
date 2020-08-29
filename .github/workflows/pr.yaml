@@ -32,15 +32,15 @@ jobs:
         if: steps.git-check.outputs.changed == 'true'
         run: echo "YEP CHANGED!"
 
-      # - name: Set Dir Variable
-      #   if: steps.git-check.outputs.changed == 'true'
-      #   run: |
-      #     echo ::set-output name=service-dir=services/${{ matrix.dirs }}
+      - name: Set Dir Variable
+        if: steps.git-check.outputs.changed == 'true'
+        run: |
+          echo "::set-env name=SERVICE_DIR::services/${{ matrix.dirs }}
 
       - name: Deploy
         if: steps.git-check.outputs.changed == 'true'
         env:
           PORT: ${{ secrets.PORT }}
         run: |
-          (echo "cat <<EOF"; cat ./services/${{ matrix.dirs }}/service.yaml; echo "EOF";) | bash > ./services/${{ matrix.dirs }}/service_ready.yaml
-          cat ./services/${{ matrix.dirs }}/service_ready.yaml
+          (echo "cat <<EOF"; cat ${{ env.SERVICE_DIR }}/service.yaml; echo "EOF";) | bash > ${{ env.SERVICE_DIR }}/service_ready.yaml
+          cat ${{ env.SERVICE_DIRS }}/service_ready.yaml
