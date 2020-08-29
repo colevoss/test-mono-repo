@@ -15,16 +15,13 @@ jobs:
         dirs: [service-one, service-two]
 
     steps:
-      # - uses: actions/checkout@v2
-      #   with:
-      #     ref: origin/${{ github.base_ref }}
-
       - uses: actions/checkout@v2
       - run: |
           git fetch --no-tags --prune --depth=1 origin ${{github.base_ref}}:${{github.base_ref}}
 
-      # - name: Check Git Diff Log
-      #   run: git diff --name-only origin/${{ github.base_ref }} ${{ github.sha }} ${{ matrix.dirs }}
+      - name: Check Git Diff Log
+        run: |
+          git diff --name-only origin/${{ github.base_ref }} ${{ github.sha }} services/${{ matrix.dirs }}
 
       - name: Check Git Diff
         id: git-check
@@ -34,3 +31,16 @@ jobs:
       - name: Do something
         if: steps.git-check.outputs.changed == 'true'
         run: echo "YEP CHANGED!"
+
+      - name: Set Dir Variable
+        if: steps.git-check.outputs.changed == 'true'
+        run: |
+          echo "::set-env name=SERVICE_DIR::services/${{ matrix.dirs }}"
+
+      - name: Deploy
+        if: steps.git-check.outputs.changed == 'true'
+        env:
+          PORT: ${{ secrets.PORT }}
+        run: |
+          (echo "cat <<EOF"; cat ${{ env.SERVICE_DIR }}/service.yaml; echo "EOF";) | bash > ${{ env.SERVICE_DIR }}/service_ready.yaml
+          cat ${{ env.SERVICE_DIR }}/service_ready.yaml
