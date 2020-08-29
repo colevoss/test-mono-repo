@@ -1,0 +1,16 @@
+name: On Workflow
+
+on:
+  workflow_run:
+    workflows:
+      - 'Pull Request'
+    types:
+      - completed
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 'hello!'
+        run: echo "HELLO THERE"
