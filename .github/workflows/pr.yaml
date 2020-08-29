@@ -1,0 +1,36 @@
+name: Pull Request
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        dirs: [service-one, service-two]
+
+    steps:
+      # - uses: actions/checkout@v2
+      #   with:
+      #     ref: origin/${{ github.base_ref }}
+
+      - uses: actions/checkout@v2
+      - run: |
+          git fetch --no-tags --prune --depth=1 origin ${{github.base_ref}}:${{github.base_ref}}
+
+      # - name: Check Git Diff Log
+      #   run: git diff --name-only origin/${{ github.base_ref }} ${{ github.sha }} ${{ matrix.dirs }}
+
+      - name: Check Git Diff
+        id: git-check
+        run: |
+          echo ::set-output name=changed::$(if git diff --name-only --quiet origin/${{ github.base_ref }} ${{ github.sha }} services/${{ matrix.dirs }}; then echo "false"; else echo "true"; fi)
+
+      - name: Do something
+        if: steps.git-check.outputs.changed == 'true'
+        run: echo "YEP CHANGED!"
