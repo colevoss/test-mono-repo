@@ -48,7 +48,7 @@ jobs:
         with:
           script: |
             console.log("${{ matrix.dirs }}");
-            await github.issues.setLabels({
+            await github.issues.addLabels({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: ${{ env.PR_NUMBER }},
