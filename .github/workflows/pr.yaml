@@ -36,7 +36,7 @@ jobs:
         if: steps.git-check.outputs.changed == 'true'
         run: |
           echo "::set-env name=SERVICE_DIR::services/${{ matrix.dirs }}"
-          echo "::set-env name=PR_NUMBER::$(echo ${{ github.ref }} | awk 'BEGIN { FS = "/" } ; {print $3')"
+          echo "::set-env name=PR_NUMBER::$(echo ${{ github.ref }} | awk 'BEGIN { FS = \"/\" } ; {print $3')"
 
       - name: Set Labels
         if: steps.git-check.outputs.changed == 'true'
@@ -47,7 +47,7 @@ jobs:
             await github.issues.setLabels({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: "${{ env.PR_NUMBER }},
+              issue_number: "${{ env.PR_NUMBER }}",
               // labels: ["${{matrix.dirs}}"]
             })
 
