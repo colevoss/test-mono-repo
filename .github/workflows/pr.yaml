@@ -19,6 +19,10 @@ jobs:
       - run: |
           git fetch --no-tags --prune --depth=1 origin ${{github.base_ref}}:${{github.base_ref}}
 
+      - name: Check Git Diff Log
+        run: |
+          git diff --name-only --quiet origin/${{ github.base_ref }} ${{ github.sha }} services/${{ matrix.dirs }}
+
       - name: Check Git Diff
         id: git-check
         run: |
