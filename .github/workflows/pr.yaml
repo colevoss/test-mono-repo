@@ -35,8 +35,7 @@ jobs:
       - name: Set Dir Variable
         if: steps.git-check.outputs.changed == 'true'
         run: |
-          export SERVICE_DIR=services/${{ matrix.dirs }}
-          echo "::set-env name=SERVICE_DIR::$SERVICE_DIR"
+          echo "::set-env name=SERVICE_DIR::$(echo "services/${{ matrix.dirs }}")
 
       - name: Deploy
         if: steps.git-check.outputs.changed == 'true'
