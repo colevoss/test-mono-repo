@@ -17,9 +17,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          fetch-depth: 0
+          ref: ${{ github.base_ref }}
 
+      - uses: actions/checkout@v2
+
+        # with:
+        #   fetch-depth: 0
       - name: Check Git Diff Log
+        # run: git diff --name-only --quiet ${{ github.sha }} ${{ github.base_ref }} ${{ matrix.dirs }}
         run: git diff --name-only --quiet ${{ github.sha }} ${{ github.base_ref }} ${{ matrix.dirs }}
 
       - name: Check Git Diff
