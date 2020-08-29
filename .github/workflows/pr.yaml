@@ -35,7 +35,25 @@ jobs:
       - name: Set Dir Variable
         if: steps.git-check.outputs.changed == 'true'
         run: |
+          echo $GITHUB_REF
+
+          export PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+          echo $PR_NUMBER
           echo "::set-env name=SERVICE_DIR::services/${{ matrix.dirs }}"
+          echo "::set-env name=PR_NUMBER::$PR_NUMBER"
+
+      - name: Set Labels
+        if: steps.git-check.outputs.changed == 'true'
+        uses: actions/github-script@v2
+        with:
+          script: |
+            console.log("${{ matrix.dirs }}");
+            await github.issues.setLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: ${{ env.PR_NUMBER }},
+              labels: ["${{matrix.dirs}}"]
+            })
 
       - name: Deploy
         if: steps.git-check.outputs.changed == 'true'
