@@ -35,8 +35,10 @@ jobs:
       - name: Set Dir Variable
         if: steps.git-check.outputs.changed == 'true'
         run: |
+          export PR_NUMBER=$(echo ${{ github.ref }} | awk 'BEGIN { FS = "/" } ; {print $3')
+          echo $PR_NUMBER
           echo "::set-env name=SERVICE_DIR::services/${{ matrix.dirs }}"
-          echo "::set-env name=PR_NUMBER::$(echo ${{ github.ref }} | awk 'BEGIN { FS = \"/\" } ; {print $3')"
+          echo "::set-env name=PR_NUMBER::$PR_NUMBER"
 
       - name: Set Labels
         if: steps.git-check.outputs.changed == 'true'
