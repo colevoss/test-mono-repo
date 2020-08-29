@@ -46,8 +46,8 @@ jobs:
             await github.issues.setLabels({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: env.PR_NUMBER,
-              labels: [matrix.dirs]
+              issue_number: "${{ env.PR_NUMBER }},
+              labels: ["${{matrix.dirs}}"]
             })
 
       - name: Deploy
