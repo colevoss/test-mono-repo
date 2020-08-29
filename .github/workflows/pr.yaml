@@ -36,7 +36,8 @@ jobs:
         if: steps.git-check.outputs.changed == 'true'
         run: |
           echo $GITHUB_REF
-          export PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; {print $3')
+
+          export PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
           echo $PR_NUMBER
           echo "::set-env name=SERVICE_DIR::services/${{ matrix.dirs }}"
           echo "::set-env name=PR_NUMBER::$PR_NUMBER"
