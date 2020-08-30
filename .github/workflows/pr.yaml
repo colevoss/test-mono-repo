@@ -39,6 +39,11 @@ jobs:
           service_account_key: ${{ secrets.GCP_SA_KEY }}
           export_default_credentials: true
 
+      - name: Generate Access Token
+        id: generate_access_token
+        run: |
+          echo "::set-output name=token::$(gcloud auth print-access-token)"
+
       - name: Set Dir Variable
         if: steps.git-check.outputs.changed == 'true'
         run: |
