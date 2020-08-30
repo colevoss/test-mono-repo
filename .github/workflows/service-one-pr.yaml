@@ -1,0 +1,45 @@
+name: Service One PR
+
+on:
+  pull_request:
+    paths:
+      - 'services/service-one/**'
+    types: [opened, synchronize]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set Dir Variable
+        if: steps.git-check.outputs.changed == 'true'
+        run: |
+          echo $GITHUB_REF
+
+          export PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+          echo $PR_NUMBER
+          echo "::set-env name=SERVICE_DIR::services/service-one"
+          echo "::set-env name=PR_NUMBER::$PR_NUMBER"
+
+      - name: Set Labels
+        if: steps.git-check.outputs.changed == 'true'
+        uses: actions/github-script@v2
+        with:
+          script: |
+            console.log("${{ matrix.dirs }}");
+            await github.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: ${{ env.PR_NUMBER }},
+              labels: ["service-one"]
+            })
+
+      - name: Deploy
+        if: steps.git-check.outputs.changed == 'true'
+        env:
+          PORT: ${{ secrets.PORT }}
+        run: |
+          (echo "cat <<EOF"; cat ${{ env.SERVICE_DIR }}/service.yaml; echo "EOF";) | bash > ${{ env.SERVICE_DIR }}/service_ready.yaml
+          cat ${{ env.SERVICE_DIR }}/service_ready.yaml
