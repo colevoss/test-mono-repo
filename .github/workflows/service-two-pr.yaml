@@ -1,9 +1,9 @@
-name: Service One PR
+name: Service Two PR
 
 on:
   pull_request:
     paths:
-      - 'services/service-one/**'
+      - 'services/service-two/**'
     types: [opened, synchronize]
 
 jobs:
@@ -19,7 +19,7 @@ jobs:
 
           export PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
           echo $PR_NUMBER
-          echo "::set-env name=SERVICE_DIR::services/service-one"
+          echo "::set-env name=SERVICE_DIR::services/service-two"
           echo "::set-env name=PR_NUMBER::$PR_NUMBER"
 
       - name: Set Labels
@@ -31,7 +31,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: ${{ env.PR_NUMBER }},
-              labels: ["service-one"]
+              labels: ["service-two"]
             })
 
       - name: Deploy
