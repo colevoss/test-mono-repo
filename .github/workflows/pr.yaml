@@ -96,7 +96,8 @@ jobs:
         if: steps.git-check.outputs.changed == 'true'
         run: |
           gcloud components install beta
-          gcloud beta run deploy ${{ matrix.dirs }} --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ matrix.dirs }}:${{ env.BRANCH_NAME }} --platform managed --region us-central1 --allow-unauthenticated --tag ${{ env.BRANCH_NAME }}
+          gcloud beta run deploy ${{ matrix.dirs }} --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ matrix.dirs }}:${{ env.BRANCH_NAME }} --platform managed --region us-central1 --allow-unauthenticated --tag ${{ env.BRANCH_NAME }} --no-traffic
+          gcloud run services add-iam-policy-binding ${{ matrix.dirs }} --member="allUsers" --role="roles/run.invoker"
 
       #
       # - name: Test Deployment
