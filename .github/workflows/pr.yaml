@@ -72,7 +72,7 @@ jobs:
             await github.repos.createDeployment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: ${{ github.ref }},
+              ref: context.sha,
               description: ${{ matrix.dirs }},
               transient_environment: true
             })
