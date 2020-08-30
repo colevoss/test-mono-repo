@@ -42,7 +42,7 @@ jobs:
           export PR_NUMBER=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
           echo $PR_NUMBER
           echo $BRANCH_NAME
-          echo IDK
+          echo $IDK
           echo "::set-env name=SERVICE_DIR::services/${{ matrix.dirs }}"
           echo "::set-env name=PR_NUMBER::$PR_NUMBER"
 
