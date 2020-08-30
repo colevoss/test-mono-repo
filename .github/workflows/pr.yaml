@@ -91,6 +91,12 @@ jobs:
           username: oauth2accesstoken
           password: ${{ steps.generate_access_token.outputs.token }}
           path: ${{ env.SERVICE_DIR }}
+
+      - name: Test
+        if: steps.git-check.outputs.changed == 'true'
+        run: |
+          gcloud beta run deploy ${{ matrix.dirs }} --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ matrix.dirs }}:${{ env.BRANCH_NAME }} --platform managed --region us-central1 --allow-unauthenticated
+
       #
       # - name: Test Deployment
       #   if: steps.git-check.outputs.changed == 'true'
