@@ -92,10 +92,10 @@ jobs:
           password: ${{ steps.generate_access_token.outputs.token }}
           path: ${{ env.SERVICE_DIR }}
 
-      - name: Test
+      - name: Deploy
         if: steps.git-check.outputs.changed == 'true'
         run: |
-          gcloud beta run deploy ${{ matrix.dirs }} --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ matrix.dirs }}:${{ env.BRANCH_NAME }} --platform managed --region us-central1 --allow-unauthenticated
+          gcloud beta run deploy ${{ matrix.dirs }} --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ matrix.dirs }} --platform managed --region us-central1 --allow-unauthenticated --tag ${{ env.BRANCH_NAME }} --no-traffic
 
       #
       # - name: Test Deployment
