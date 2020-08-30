@@ -83,11 +83,12 @@ jobs:
           jq -r .test config.json | bash
 
       - uses: docker/build-push-action@v1
+        if: steps.git-check.outputs.changed == 'true'
         with:
           registry: gcr.io
           repository: ${{ secrets.GCP_PROJECT_ID }}/${{ matrix.dirs }}
           tags: ${{ env.BRANCH_NAME }}
-          username: _json_key
+          username: oauth2accesstoken
           password: ${{ steps.generate_access_token.outputs.token }}
           path: ${{ env.SERVICE_DIR }}
       #
