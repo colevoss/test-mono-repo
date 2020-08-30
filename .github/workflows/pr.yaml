@@ -33,6 +33,7 @@ jobs:
         run: echo "YEP CHANGED!"
 
       - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        if: steps.git-check.outputs.changed == 'true'
         with:
           version: '307.0.0'
           project_id: ${{ secrets.GCP_PROJECT_ID }}
@@ -80,6 +81,15 @@ jobs:
         working-directory: ${{ env.SERVICE_DIR }}
         run: |
           jq -r .test config.json | bash
+
+      - uses: docker/build-push-action@v1
+        with:
+          registry: gcr.io
+          repository: ${{ secretes.GCP_PROJECT_ID }}/${{ matrix.dirs }}
+          tags: ${{ env.BRANCH_NAME }}
+          username: _json_key
+          password: ${{ steps.generate_access_token.outputs.token }}
+          path: ${{ env.SERVICE_DIR }}
       #
       # - name: Test Deployment
       #   if: steps.git-check.outputs.changed == 'true'
