@@ -76,6 +76,7 @@ jobs:
 
       - name: Test
         if: steps.git-check.outputs.changed == 'true'
+        working-directory: ${{ env.SERVICE_DIR }}
         run: |
           jq -r .test ${{ env.SERVICE_DIR }}/config.json | bash
       #
