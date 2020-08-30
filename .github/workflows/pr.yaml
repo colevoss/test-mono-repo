@@ -62,3 +62,17 @@ jobs:
         run: |
           (echo "cat <<EOF"; cat ${{ env.SERVICE_DIR }}/service.yaml; echo "EOF";) | bash > ${{ env.SERVICE_DIR }}/service_ready.yaml
           cat ${{ env.SERVICE_DIR }}/service_ready.yaml
+
+      - name: Test Deployment
+        if: steps.git-check.outputs.changed == 'true'
+        uses: actions/github-script@v2
+        with:
+          previews: ant-man-preview
+          script: |
+            await github.repos.createDeployment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: ${{ github.ref }},
+              description: ${{ matrix.dirs }},
+              transient_environment: true
+            })
