@@ -40,6 +40,7 @@ jobs:
           export_default_credentials: true
 
       - name: Generate Access Token
+        if: steps.git-check.outputs.changed == 'true'
         id: generate_access_token
         run: |
           echo "::set-output name=token::$(gcloud auth print-access-token)"
@@ -78,7 +79,7 @@ jobs:
         if: steps.git-check.outputs.changed == 'true'
         working-directory: ${{ env.SERVICE_DIR }}
         run: |
-          jq -r .test ${{ env.SERVICE_DIR }}/config.json | bash
+          jq -r .test config.json | bash
       #
       # - name: Test Deployment
       #   if: steps.git-check.outputs.changed == 'true'
