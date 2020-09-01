@@ -6,7 +6,7 @@ on:
 
 jobs:
   doit:
-    if: contains(github.event.issue.body, "test")
+    if: contains(github.event.issue.body, 'test')
     runs-on: ubuntu-latest
 
     steps:
