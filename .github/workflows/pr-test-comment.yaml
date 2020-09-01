@@ -1,0 +1,13 @@
+name: PR Comment
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  doit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: |
+          echo ${{ github.event.body }}

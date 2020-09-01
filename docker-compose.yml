@@ -1,0 +1,8 @@
+version: '3.0'
+
+services:
+  service-one:
+    build:
+      context: ./services/service-one
+    ports:
+      - '3001:8080'
