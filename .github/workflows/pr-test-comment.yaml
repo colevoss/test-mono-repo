@@ -6,8 +6,9 @@ on:
 
 jobs:
   doit:
+    if: contains(github.event.issue.body, "test")
     runs-on: ubuntu-latest
 
     steps:
       - run: |
-          echo ${{ github.event.issue.body }}
+          echo "${{ github.event.issue.body }}!!!!!!!!!!!!!!!"
