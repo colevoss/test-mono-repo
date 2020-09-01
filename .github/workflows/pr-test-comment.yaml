@@ -10,4 +10,4 @@ jobs:
 
     steps:
       - run: |
-          echo ${{ github.event.body }}
+          echo ${{ github.event.issue.body }}
