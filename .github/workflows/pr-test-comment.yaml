@@ -6,9 +6,9 @@ on:
 
 jobs:
   doit:
-    if: contains(github.event.issue_comment.body, 'test')
+#     if: contains(github.event.issue_comment.body, 'test')
     runs-on: ubuntu-latest
 
     steps:
       - run: |
-          echo "${{ github.event.issue_comment.body }}!!!!!!!!!!!!!!!"
+          echo "${{ toJson(github.event) }}!!!!!!!!!!!!!!!"
