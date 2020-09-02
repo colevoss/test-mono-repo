@@ -102,9 +102,7 @@ jobs:
             await github.checks.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              head_sha: context.github.sha
-              issue_number: ${{ env.PR_NUMBER }},
-              labels: ["${{matrix.dirs}}"]
+              head_sha: context.github.sha,
               name: "Test Check",
               details_url: "https://www.google.com/",
               conclusion: "neutral"
