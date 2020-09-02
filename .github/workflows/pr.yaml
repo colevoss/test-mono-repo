@@ -6,6 +6,8 @@ on:
 
 jobs:
   test:
+    outputs:
+      hello: 'HELLO THERE'
     runs-on: ubuntu-latest
 
     strategy:
