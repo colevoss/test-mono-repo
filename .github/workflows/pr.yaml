@@ -105,7 +105,6 @@ jobs:
             --allow-unauthenticated \
             --tag ${{ env.BRANCH_NAME }} \
             --quiet
-          gcloud run services
 
       - name: Get Service Url
         if: steps.git-check.outputs.changed == 'true'
@@ -114,10 +113,8 @@ jobs:
             --platform=managed \
             --format=json | \
             jq '.[] | select(.metadata.name == "${{ matrix.dirs }}") | .status.traffic[] | select(.tag == "${{ env.BRANCH_NAME }}") | .url'
-
         # --no-traffic \
         # gcloud components install beta
-
 
       #
       # - name: Test Deployment
