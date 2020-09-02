@@ -105,6 +105,7 @@ jobs:
             --allow-unauthenticated \
             --tag ${{ env.BRANCH_NAME }} \
             --quiet
+            --format=json
 
         # --no-traffic \
 
