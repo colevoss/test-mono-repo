@@ -97,7 +97,8 @@ jobs:
       - name: Deploy
         if: steps.git-check.outputs.changed == 'true'
         run: |
-          gcloud run deploy ${{ matrix.dirs }} \
+          gcloud components install beta
+          gcloud beta run deploy ${{ matrix.dirs }} \
             --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ matrix.dirs }}:${{ env.BRANCH_NAME }} \
             --platform managed \
             --region us-central1 \
