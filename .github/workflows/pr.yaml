@@ -94,28 +94,43 @@ jobs:
           password: ${{ steps.generate_access_token.outputs.token }}
           path: ${{ env.SERVICE_DIR }}
 
-      - name: Deploy
+      - name: Try Check
         if: steps.git-check.outputs.changed == 'true'
-        run: |
-          gcloud components install beta
-          gcloud beta run deploy ${{ matrix.dirs }} \
-            --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ matrix.dirs }}:${{ env.BRANCH_NAME }} \
-            --platform managed \
-            --region us-central1 \
-            --allow-unauthenticated \
-            --tag ${{ env.BRANCH_NAME }} \
-            --quiet
-
-      - name: Get Service Url
-        if: steps.git-check.outputs.changed == 'true'
-        run: |
-          gcloud run services list \
-            --platform=managed \
-            --format=json | \
-            jq '.[] | select(.metadata.name == "${{ matrix.dirs }}") | .status.traffic[] | select(.tag == "${{ env.BRANCH_NAME }}") | .url'
-        # --no-traffic \
-        # gcloud components install beta
-
+        uses: actions/github-script@v2
+        with:
+          script: |
+            await github.checks.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              head_sha: context.github.sha
+              issue_number: ${{ env.PR_NUMBER }},
+              labels: ["${{matrix.dirs}}"]
+              name: "Test Check",
+              details_url: "https://www.google.com/",
+              conclusion: "neutral"
+            })
+      #
+      # - name: Deploy
+      #   if: steps.git-check.outputs.changed == 'true'
+      #   run: |
+      #     gcloud components install beta
+      #     gcloud beta run deploy ${{ matrix.dirs }} \
+      #       --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ matrix.dirs }}:${{ env.BRANCH_NAME }} \
+      #       --platform managed \
+      #       --region us-central1 \
+      #       --allow-unauthenticated \
+      #       --tag ${{ env.BRANCH_NAME }} \
+      #       --quiet
+      #
+      # - name: Get Service Url
+      #   if: steps.git-check.outputs.changed == 'true'
+      #   run: |
+      #     gcloud run services list \
+      #       --platform=managed \
+      #       --format=json | \
+      #       jq '.[] | select(.metadata.name == "${{ matrix.dirs }}") | .status.traffic[] | select(.tag == "${{ env.BRANCH_NAME }}") | .url'
+      # --no-traffic \
+      # gcloud components install beta
       #
       # - name: Test Deployment
       #   if: steps.git-check.outputs.changed == 'true'
