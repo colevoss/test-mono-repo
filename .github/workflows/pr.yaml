@@ -97,17 +97,25 @@ jobs:
       - name: Deploy
         if: steps.git-check.outputs.changed == 'true'
         run: |
-          gcloud components install beta
-          gcloud beta run deploy ${{ matrix.dirs }} \
+          gcloud run deploy ${{ matrix.dirs }} \
             --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ matrix.dirs }}:${{ env.BRANCH_NAME }} \
             --platform managed \
             --region us-central1 \
             --allow-unauthenticated \
             --tag ${{ env.BRANCH_NAME }} \
             --quiet
-            --format=json
+          gcloud run services
+
+      - name: Get Service Url
+        if: steps.git-check.outputs.changed == 'true'
+        run: |
+          gcloud run services list \
+            --platform=managed \
+            --format=json | \
+            jq '.[] | select(.metadata.name == "${{ matrix.dirs }}") | .status.traffic[] | select(.tag == "${{ env.BRANCH_NAME }}") | .url'
 
         # --no-traffic \
+        # gcloud components install beta
 
 
       #
