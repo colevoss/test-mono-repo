@@ -1,11 +1,12 @@
 name: On Workflow
 
 on:
-  workflow_run:
-    workflows:
-      - 'Pull Request'
-    types:
-      - completed
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Person to greet'
+        required: true
+        default: 'Mona the Octocat'
 
 jobs:
   test:
